@@ -19,24 +19,24 @@ glm v0.9.5.4(如果用其他版本需要修改rad和degree)
 ## missions:
 
 
-> +++ -> 已完成
+> +++++ -> 已完成
 
-> &+ -> 正在做
+> ++ -> 正在做
 
 > ? -> 准备做(预备知识学习)
 
 
 
 Basic:
-1. Camera Roaming +++
-2. Simple lighting and shading(phong) +
-3. Texture mapping +++
-4. Shadow mapping +
-5. Model import & Mesh viewing(Assimp) +
+1. Camera Roaming +++++
+2. Simple lighting and shading(phong) ++
+3. Texture mapping +++++
+4. Shadow mapping ++
+5. Model import & Mesh viewing(Assimp) ++
 
 Bonus:
 
-1. Sky Box +++
+1. Sky Box +++++
 2. Cloth Simulation ?
 3. Display Text ?
 4. Stencil Test
@@ -47,8 +47,8 @@ Bonus:
 9. Explosion Effect ?
 10. Anti-Aliasing
 11. Fluid Simulation
+   ...
 
-...
 
 ------------------------
 
