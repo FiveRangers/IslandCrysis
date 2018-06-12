@@ -3,17 +3,24 @@ Implement of the Scene
 
 ##
 environment:
+
 OpenGL v3.3
+
 GLFW v3
+
 glm v0.9.5.4(如果用其他版本需要修改rad和degree)
 
 
 
+##structure
+资源在./IslandCrysis/FirstGLFW/resouorces/目录下
 
 
 missions:
 +++ -> 已完成
+
 + -> 正在做
+
 ? -> 准备做(预备知识学习)
 
 Basic:
@@ -36,8 +43,10 @@ Bonus:
 9. Explosion Effect ?
 10. Anti-Aliasing
 11. Fluid Simulation
+
 ...
 
+------------------------
 
 mission 1: 
 
@@ -52,8 +61,10 @@ mzh & czx ： Cloth Simulation和Display Text学习
 
 DDL: 06.15
 
+----------------------
 
 mission 2:
+
 ll & lcy : 导入更多静态模型，配合整合lighting、shading、shadowmapping
 
 lbb：进行多光源(月亮和火把)lighting和shading，完成shadowmapping
