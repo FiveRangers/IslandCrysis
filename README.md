@@ -12,16 +12,21 @@ glm v0.9.5.4(如果用其他版本需要修改rad和degree)
 
 
 
-##structure
+## structure
+
 资源在./IslandCrysis/FirstGLFW/resouorces/目录下
 
 
 missions:
+
+'''
 +++ -> 已完成
 
 + -> 正在做
 
 ? -> 准备做(预备知识学习)
+
+'''
 
 Basic:
 1. Camera Roaming +++
