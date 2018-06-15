@@ -1,4 +1,3 @@
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
@@ -8,31 +7,22 @@
 #include "imgui_impl_glfw_gl3.h"
 #include <vector>
 #include <math.h>
-#include <glm\glm\glm.hpp>
+#include <glm\glm.hpp>
 #include "Shader.h"
-#include <glm\glm\gtc\matrix_transform.hpp>
-#include <glm\glm\gtc\type_ptr.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
 #include "Camera.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
-
-
-
+#include "model.h"
 
 using namespace std;
-
-
-
-
-
 
 //GLFW窗口大小
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 
 unsigned int MAX_BUFFER = SCR_WIDTH * SCR_HEIGHT;
-
 
 //初始化相机
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -46,14 +36,9 @@ float lastFrame = 0.0f;
 
 unsigned int planeVAO;
 
-
-
-
 //鼠标移动时调用
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	if (firstMouse)
-	{
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+	if (firstMouse) {
 		lastX = xpos;
 		lastY = ypos;
 		firstMouse = false;
@@ -69,8 +54,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 //鼠标滚轮移动时调用
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.ProcessMouseScroll(yoffset);
 }
 
@@ -80,8 +64,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 //定义键盘操作输入
-void processInput(GLFWwindow *window)
-{
+void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
@@ -151,8 +134,7 @@ unsigned int loadTexture(char const * path)
 
 		stbi_image_free(data);
 	}
-	else
-	{
+	else {
 		std::cout << "Texture failed to load at path: " << path << std::endl;
 		stbi_image_free(data);
 	}
@@ -160,25 +142,15 @@ unsigned int loadTexture(char const * path)
 	return textureID;
 }
 
-
-void renderScene(const Shader &shader)
-{
+void renderScene(const Shader &shader) {
 	//地面
 	glm::mat4 model;
 	shader.setMat4("model", model);
 	glBindVertexArray(planeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	
 }
 
-
-
-
 int main() {
-
-	
-
 	//初始化GLFW
 	if (!glfwInit()) {
 		return -1;
@@ -189,7 +161,7 @@ int main() {
 	//核心模式
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* Mywindow = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MyWindow", NULL, NULL);
+	GLFWwindow* Mywindow = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "IslandCrysis", NULL, NULL);
 	
 	//设定指针和滚轮的回调函数
 	glfwSetCursorPosCallback(Mywindow, mouse_callback);
@@ -203,8 +175,7 @@ int main() {
 	glfwSetFramebufferSizeCallback(Mywindow, framebuffer_size_callback);
 
 	//初始化GLAD
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
@@ -218,10 +189,16 @@ int main() {
 	//打开深度测试
 	glEnable(GL_DEPTH_TEST);
 	
-
 	Shader shader("./shadow_mappingVS.glsl", "./shadow_mappingFS.glsl");
 
 	Shader DepthShader("./DepthVS.glsl", "./DepthFS.glsl");
+
+	Shader ModelShader("ModelShader.vert", "ModelShader.frag");
+
+	Model tree1("./resources/tree1/file.obj");
+	Model tree2("./resources/tree2/file.obj");
+	Model tent("./resources/tent/file.obj"); 
+	Model fire("./resources/fire/fire.obj");
 
 	float planeVertices[] = {
 		//位置           // 法向量         // 纹理坐标
@@ -233,6 +210,7 @@ int main() {
 		-25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
 		25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
 	};
+
 	//平面VAO
 	unsigned int planeVBO;
 	glGenVertexArrays(1, &planeVAO);
@@ -259,7 +237,6 @@ int main() {
 	unsigned int depthMapFBO;
 	glGenFramebuffers(1, &depthMapFBO);
 
-
 	unsigned int depthMap;
 	glGenTextures(1, &depthMap);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
@@ -276,12 +253,11 @@ int main() {
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+
 	//配置着色器
 	shader.use();
 	shader.setInt("diffuseTexture", 0);
 	shader.setInt("shadowMap", 1);
-
-
 
 	float skyboxVertices[] = {
 		// positions          
@@ -354,11 +330,6 @@ int main() {
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
 
-	
-
-
-	
-
 	while (!glfwWindowShouldClose(Mywindow)) {
 		//定义变量
 		//光源初始位置
@@ -378,9 +349,6 @@ int main() {
 		//清屏为白色
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-
-		
 
 		//从光源的角度渲染场景
 		glm::mat4 lightProjection, lightView;
@@ -396,7 +364,7 @@ int main() {
 			shader.setBool("isOrtho", false);
 			shader.setFloat("near_plane", near_plane);
 			shader.setFloat("far_plane", far_plane);
-			lightProjection = glm::perspective(glm::degrees(45.0f), 1.0f, 0.1f, 100.0f);
+			lightProjection = glm::perspective(45.0f, 1.0f, 0.1f, 100.0f);
 		}
 		lightView = glm::lookAt(glm::vec3(Light_X, Light_Y,Light_Z), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
 		lightSpaceMatrix = lightProjection * lightView;
@@ -418,7 +386,7 @@ int main() {
 
 		//利用深度贴图渲染场景
 		shader.use();
-		glm::mat4 projection = glm::perspective(glm::degrees(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
@@ -432,12 +400,49 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		renderScene(shader);
 		
+		// tree model
+		ModelShader.use();
+		projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		view = camera.GetViewMatrix();
+		ModelShader.setMat4("projection", projection);
+		ModelShader.setMat4("view", view);
+		glm::mat4 model;
+		model = glm::translate(model, glm::vec3(0.0f, -1.75f, -10.0f));
+		ModelShader.setMat4("model", model);
+		tree1.Draw(ModelShader);
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-5.0f, -3.0f, 0.0f));
+		ModelShader.setMat4("model", model);
+		tree1.Draw(ModelShader);
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(5.0f, -3.0f, 10.0f));
+		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+		ModelShader.setMat4("model", model);
+		tree2.Draw(ModelShader);
+
+		// tent
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-5.0f, -2.0f, -10.0f));
+		model = glm::rotate(model, 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.005f, 0.005f, 0.005f));
+		ModelShader.setMat4("model", model);
+		tent.Draw(ModelShader);
+
+		// fire
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(7.5f, -0.5f, -2.0f));
+		//model = glm::rotate(model, 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
+		ModelShader.setMat4("model", model);
+		fire.Draw(ModelShader);
+
+
 		// draw skybox
 		glDepthFunc(GL_LEQUAL);
 		skyboxShader.use();
-		glm::mat4 model;
 		view = camera.GetViewMatrix();
-		projection = glm::perspective(glm::degrees(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		//view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
 		skyboxShader.setMat4("view", view);
 		skyboxShader.setMat4("projection", projection);
@@ -449,7 +454,6 @@ int main() {
 		glBindVertexArray(0);
 		glDepthFunc(GL_LESS);
 
-
 		glfwSwapBuffers(Mywindow);
 		glfwPollEvents();
 	}
@@ -459,8 +463,6 @@ int main() {
 
 	glfwTerminate();
 	
-	
-
 	return 0;
 }
 
