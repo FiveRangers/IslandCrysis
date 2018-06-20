@@ -2,8 +2,8 @@
 #define CAMERA_H
 
 #include <glad/glad.h>
-#include <glm/glm/glm.hpp>
-#include <glm/glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
 
@@ -78,7 +78,7 @@ public:
 			Position -= Right * velocity;
 		if (direction == RIGHT)
 			Position += Right * velocity;
-		Position.y = 0.0f;
+		//Position.y = 0.0f;
 	}
 
 	// Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
