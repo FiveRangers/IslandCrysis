@@ -150,6 +150,7 @@ int main() {
 	Model fire("./resources/fire/fire.obj");
 	Model moon("./resources/moon/Moon.obj");
 	Model seabird("./resources/seabird/seabird.obj");
+	Model fence("./resources/fence/fence.obj");
 
 	float skyboxVertices[] = {
 		// positions          
@@ -276,6 +277,14 @@ int main() {
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		ModelShader.setMat4("model", model);
 		seabird.Draw(ModelShader);
+
+		// fence
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(3.0f, 8.5f, -2.0f));
+		model = glm::rotate(model, -15.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.0005f, 0.0005f, 0.0005f));
+		ModelShader.setMat4("model", model);
+		fence.Draw(ModelShader);
 		
 		// island
 		model = glm::mat4();
