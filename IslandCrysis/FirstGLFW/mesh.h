@@ -7,7 +7,7 @@
 #include <glm/glm/glm.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
 
-#include "MyShader.h"
+#include "Shader.h"
 
 #include <string>
 #include <fstream>

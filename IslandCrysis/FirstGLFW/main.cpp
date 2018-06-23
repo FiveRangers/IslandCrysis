@@ -15,6 +15,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "model.h"
+#include "particle_generator.h"
 
 using namespace std;
 
@@ -102,6 +103,10 @@ unsigned int loadCubemap(vector<string> faces) {
 
 	return textureID;
 }
+
+
+
+
 
 int main() {
 	//初始化GLFW
@@ -223,6 +228,14 @@ int main() {
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
 
+	//particle system
+	Shader ParticleShader("ParticleShader.vert", "ParticleShader.frag");
+
+	ParticleGenerator* Particles;
+	Particles = new ParticleGenerator(ParticleShader, 20);
+
+
+
 	while (!glfwWindowShouldClose(Mywindow)) {
 		//定义变量
 		//光源初始位置
@@ -292,6 +305,13 @@ int main() {
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		ModelShader.setMat4("model", model);
 		island.Draw(ModelShader);
+
+		//particle
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(6.7f, 1.5f, 28.1f));
+		model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
+		Particles->Update(0.05f, 1000);
+		Particles->Draw(camera, deltaTime, model, view, projection);
 
 		// draw skybox
 		glDepthFunc(GL_LEQUAL);
