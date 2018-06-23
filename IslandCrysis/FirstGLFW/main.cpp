@@ -25,7 +25,7 @@ const unsigned int SCR_HEIGHT = 720;
 unsigned int MAX_BUFFER = SCR_WIDTH * SCR_HEIGHT;
 
 //初始化相机
-Camera camera(glm::vec3(0.0f, 20.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 20.0f, -3.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -103,51 +103,6 @@ unsigned int loadCubemap(vector<string> faces) {
 	return textureID;
 }
 
-//加载纹理
-unsigned int loadTexture(char const * path)
-{
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrComponents;
-	unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		GLenum format;
-		if (nrComponents == 1)
-			format = GL_RED;
-		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else {
-		std::cout << "Texture failed to load at path: " << path << std::endl;
-		stbi_image_free(data);
-	}
-
-	return textureID;
-}
-
-void renderScene(const Shader &shader) {
-	//地面
-	glm::mat4 model;
-	shader.setMat4("model", model);
-	glBindVertexArray(planeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-}
-
 int main() {
 	//初始化GLFW
 	if (!glfwInit()) {
@@ -186,14 +141,15 @@ int main() {
 
 	//打开深度测试
 	glEnable(GL_DEPTH_TEST);
-	
-	Shader shader("./shadow_mappingVS.glsl", "./shadow_mappingFS.glsl");
-
-	Shader DepthShader("./DepthVS.glsl", "./DepthFS.glsl");
 
 	Shader ModelShader("ModelShader.vert", "ModelShader.frag");
 
+	Shader MoonShader("./MoonShader.vert", "./MoonShader.frag");
+
 	Model island("./resources/Small_Tropical_Island/Small_Tropical_Island.obj");
+	Model fire("./resources/fire/fire.obj");
+	Model moon("./resources/moon/Moon.obj");
+	Model seabird("./resources/seabird/seabird.obj");
 
 	float skyboxVertices[] = {
 		// positions          
@@ -286,22 +242,41 @@ int main() {
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// models
-		ModelShader.use();
+		// moon
+		MoonShader.use();
 		glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		ModelShader.setMat4("projection", projection);
-		ModelShader.setMat4("view", view);
+		MoonShader.setMat4("projection", projection);
+		MoonShader.setMat4("view", view);
 		glm::mat4 model;
+		model = glm::translate(model, glm::vec3(200.0f, 200.0f, -100.0f));
+		//model = glm::rotate(model, 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
+		MoonShader.setMat4("model", model);
+		moon.Draw(MoonShader);
 		
 		// fire
-		//model = glm::mat4();
-		//model = glm::translate(model, glm::vec3(7.5f, -0.5f, -2.0f));
-		//model = glm::rotate(model, 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-		//model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
-		//ModelShader.setMat4("model", model);
-		//fire.Draw(ModelShader);
+		ModelShader.use();
+		projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
+		view = camera.GetViewMatrix();
+		ModelShader.setMat4("projection", projection);
+		ModelShader.setMat4("view", view);
+		ModelShader.setVec3("viewPos", camera.Position);
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(7.0f, 1.0f, 20.0f));
+		model = glm::rotate(model, 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
+		ModelShader.setMat4("model", model);
+		fire.Draw(ModelShader);
 
+		// seabird
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(sin(glfwGetTime()) * 32.0f, 22.0f + sin(glfwGetTime() / 2.0) * 17.0f, sin(glfwGetTime() * 1.5) * 25.0f));
+		// model = glm::rotate(model, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		ModelShader.setMat4("model", model);
+		seabird.Draw(ModelShader);
+		
 		// island
 		model = glm::mat4();
 		model = glm::scale(model, glm::vec3(0.28f, 0.28f, 0.28f));
