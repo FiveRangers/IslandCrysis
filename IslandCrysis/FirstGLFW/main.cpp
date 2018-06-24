@@ -26,7 +26,7 @@ const unsigned int SCR_HEIGHT = 720;
 unsigned int MAX_BUFFER = SCR_WIDTH * SCR_HEIGHT;
 
 //初始化相机
-Camera camera(glm::vec3(0.0f, 20.0f, -3.0f));
+Camera camera(glm::vec3(0.0f, 10.0f, 65.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -104,10 +104,6 @@ unsigned int loadCubemap(vector<string> faces) {
 	return textureID;
 }
 
-
-
-
-
 int main() {
 	//初始化GLFW
 	if (!glfwInit()) {
@@ -156,6 +152,12 @@ int main() {
 	Model moon("./resources/moon/Moon.obj");
 	Model seabird("./resources/seabird/seabird.obj");
 	Model fence("./resources/fence/fence.obj");
+	Model fossil("./resources/fossil/fossil.obj");
+	Model rabbit("./resources/rabbit/rabbit.obj");
+	Model treasure("./resources/treasure/treasure.obj");
+	Model dolphin("./resources/dolphin/dolphin.obj");
+	Model ship("./resources/ship/ship.obj");
+	Model whale("./resources/whale/whale.obj");
 
 	float skyboxVertices[] = {
 		// positions          
@@ -234,8 +236,6 @@ int main() {
 	ParticleGenerator* Particles;
 	Particles = new ParticleGenerator(ParticleShader, 20);
 
-
-
 	while (!glfwWindowShouldClose(Mywindow)) {
 		//定义变量
 		//光源初始位置
@@ -276,8 +276,11 @@ int main() {
 		ModelShader.setMat4("projection", projection);
 		ModelShader.setMat4("view", view);
 		ModelShader.setVec3("viewPos", camera.Position);
+		ModelShader.setFloat("ambient_str", 0.35f);
+		ModelShader.setFloat("diffuse_str", 0.6f);
+		ModelShader.setFloat("specular_str", 0.0f);
 		model = glm::mat4();
-		model = glm::translate(model, glm::vec3(7.0f, 1.0f, 20.0f));
+		model = glm::translate(model, glm::vec3(5.0f, 1.0f, 20.0f));
 		model = glm::rotate(model, 90.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
 		ModelShader.setMat4("model", model);
@@ -298,8 +301,97 @@ int main() {
 		model = glm::scale(model, glm::vec3(0.0005f, 0.0005f, 0.0005f));
 		ModelShader.setMat4("model", model);
 		fence.Draw(ModelShader);
+
+		// fossil
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, 27.5f));
+		model = glm::rotate(model, -15.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.018f, 0.018f, 0.018f));
+		ModelShader.setMat4("model", model);
+		fossil.Draw(ModelShader);
+
+		// rabbit
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(1.52f, 8.5f, -0.5f));
+		model = glm::rotate(model, 60.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.011f, 0.011f, 0.011f));
+		ModelShader.setMat4("model", model);
+		rabbit.Draw(ModelShader);
+
+		// treasure
+		ModelShader.setFloat("specular_str", 3.0f);
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-17.0f, 0.5f, 31.0f));
+		model = glm::rotate(model, -100.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -15.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.003f, 0.003f, 0.003f));
+		ModelShader.setMat4("model", model);
+		treasure.Draw(ModelShader);
+
+		// dolphin
+		ModelShader.setFloat("specular_str", 0.4f);
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-100.0f, 1.5f, 32.0f));
+		model = glm::rotate(model, 35.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 5.0f, 5.0f));
+		ModelShader.setMat4("model", model);
+		dolphin.Draw(ModelShader);
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-80.0f, 2.5f, 15.0f));
+		model = glm::rotate(model, -35.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		ModelShader.setMat4("model", model);
+		dolphin.Draw(ModelShader);
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-110.0f, 0.5f, 2.0f));
+		model = glm::rotate(model, -20.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		ModelShader.setMat4("model", model);
+		dolphin.Draw(ModelShader);
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-90.0f, 1.5f, -13.0f));
+		model = glm::rotate(model, 15.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f, 3.0f, 5.0f));
+		ModelShader.setMat4("model", model);
+		dolphin.Draw(ModelShader);
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-120.0f, 2.5f, -23.0f));
+		model = glm::rotate(model, -15.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f, 5.0f, 4.0f));
+		ModelShader.setMat4("model", model);
+		dolphin.Draw(ModelShader);
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-100.0f, 2.5f, -32.0f));
+		model = glm::rotate(model, -45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		ModelShader.setMat4("model", model);
+		dolphin.Draw(ModelShader);
+
+		// ship
+		ModelShader.setFloat("specular_str", 0.6f);
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(10.0f, -2.0f, -182.0f));
+		model = glm::rotate(model, 75.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.025f, 0.025f, 0.025f));
+		ModelShader.setMat4("model", model);
+		ship.Draw(ModelShader);
+
+		// whale
+		ModelShader.setFloat("specular_str", 0.3f);
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(160.0f, -10.0f, 2.0f));
+		model = glm::rotate(model, -85.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
+		ModelShader.setMat4("model", model);
+		whale.Draw(ModelShader);
 		
 		// island
+		ModelShader.setFloat("specular_str", 0.0f);
 		model = glm::mat4();
 		model = glm::scale(model, glm::vec3(0.28f, 0.28f, 0.28f));
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -308,8 +400,8 @@ int main() {
 
 		//particle
 		model = glm::mat4();
-		model = glm::translate(model, glm::vec3(6.7f, 1.5f, 28.1f));
-		model = glm::scale(model, glm::vec3(0.04f, 0.04f, 0.04f));
+		model = glm::translate(model, glm::vec3(4.9f, 1.5f, 28.1f));
+		model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
 		Particles->Update(0.05f, 1000);
 		Particles->Draw(camera, deltaTime, model, view, projection);
 
