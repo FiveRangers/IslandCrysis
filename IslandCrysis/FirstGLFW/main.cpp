@@ -16,6 +16,7 @@
 #include "stb_image.h"
 #include "model.h"
 #include "particle_generator.h"
+#include "explosion.h"
 
 using namespace std;
 
@@ -236,6 +237,10 @@ int main() {
 	ParticleGenerator* Particles;
 	Particles = new ParticleGenerator(ParticleShader, 20);
 
+	ExplosionGenerator* explosions;
+	explosions = new ExplosionGenerator(ParticleShader, 1);
+
+
 	while (!glfwWindowShouldClose(Mywindow)) {
 		//定义变量
 		//光源初始位置
@@ -289,7 +294,7 @@ int main() {
 		// seabird
 		model = glm::mat4();
 		model = glm::translate(model, glm::vec3(sin(glfwGetTime()) * 32.0f, 22.0f + sin(glfwGetTime() / 2.0) * 17.0f, sin(glfwGetTime() * 1.5) * 25.0f));
-		// model = glm::rotate(model, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 5.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		ModelShader.setMat4("model", model);
 		seabird.Draw(ModelShader);
@@ -404,6 +409,15 @@ int main() {
 		model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
 		Particles->Update(0.05f, 1000);
 		Particles->Draw(camera, deltaTime, model, view, projection);
+
+		//explosion
+
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(200.0f, 400.0f, 200.f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		explosions->Update(0.01f, 1);
+		explosions->Draw(camera, deltaTime, model, view, projection);
+
 
 		// draw skybox
 		glDepthFunc(GL_LEQUAL);
