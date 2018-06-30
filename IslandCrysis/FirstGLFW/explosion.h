@@ -5,10 +5,10 @@
 #include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm/glm.hpp>
+#include <glm/glm.hpp>
 #include "Camera.h"
 #include "Shader.h"
-#include <glm\glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\matrix_transform.hpp>
 #include "explosion.h"
 #include "texture.h"
 
