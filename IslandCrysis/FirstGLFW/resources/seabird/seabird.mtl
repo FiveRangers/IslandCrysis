@@ -1,0 +1,16 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# 创建的文件:23.06.2018 20:44:32
+
+newmtl Material
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.1176 0.1176 0.1176
+	Kd 0.7529 0.7529 0.7529
+	Ks 0.7529 0.7529 0.7529
+	Ke 0.0000 0.0000 0.0000
+	map_Ka gull.jpg
+	map_Kd gull.jpg
