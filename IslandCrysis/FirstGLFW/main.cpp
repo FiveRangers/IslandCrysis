@@ -38,6 +38,7 @@ float lastFrame = 0.0f;
 
 unsigned int quadVAO = 0;
 unsigned int quadVBO;
+
 void renderQuad()
 {
 	if (quadVAO == 0)
@@ -241,6 +242,35 @@ int main() {
 		-1000.0f, -1000.0f,  1000.0f,
 		1000.0f, -1000.0f,  1000.0f
 	};
+
+	// 初始化一块15*15的布料
+	cloth flag(15, 15);
+	// 获取布料的顶点数组指针
+	float * flagVertices = new float[flag.getRow()*flag.getCol() * 3];
+	flag.getVerticeArray(flagVertices);
+
+	// flag VAO and VBO
+	unsigned int flagVAO, flagVBO;
+	glGenVertexArrays(1, &flagVAO);
+	glGenBuffers(1, &flagVBO);
+	glBindVertexArray(flagVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, flagVBO);
+	glBufferData(GL_ARRAY_BUFFER, flag.getRow()*flag.getCol() * 3 * sizeof(float), flagVertices, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// 获取布料的索引数组指针
+	shared_ptr<unsigned int> indexPtr = flag.getIndexArray();
+	unsigned int *index = new unsigned int[(flag.getRow() - 1)*(flag.getCol() - 1) * 2 * 3];
+	flag.getIndexArray(index);
+
+	// flag EBO
+	unsigned int flagEBO;
+	glGenBuffers(1, &flagEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, flagEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, flag.getRow()*flag.getCol() * 6 * sizeof(unsigned int), index, GL_STATIC_DRAW);
+
+	Shader flagShader("FlagVS.glsl", "FlagFS.glsl");
 
 	Shader skyboxShader("skybox.vert", "skybox.frag");
 
@@ -646,6 +676,24 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 		glDepthFunc(GL_LESS);
+
+		// cloth simulation
+		flagShader.use();
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(8.0f, 10.0f, 13.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		flagShader.setMat4("model", model);
+		flagShader.setMat4("view", view);
+		flagShader.setMat4("projection", projection);
+		flagShader.setVec4("color", glm::vec4(1.0f, 0.0f,0.0f, 0.0f));
+		glBindVertexArray(flagVAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, flagEBO);
+		glDrawElements(GL_TRIANGLES, (flag.getRow()- 1)*(flag.getCol() - 1) * 6, GL_UNSIGNED_INT, 0);
+
+		flag.Update(flagVertices);
+		// 更新缓存中的织物顶顶点数据
+		glBindBuffer(GL_ARRAY_BUFFER, flagVBO);
+		glBufferData(GL_ARRAY_BUFFER, flag.getRow()*flag.getCol() * 3 * sizeof(float), flagVertices, GL_DYNAMIC_DRAW);
 
 		glfwSwapBuffers(Mywindow);
 		glfwPollEvents();

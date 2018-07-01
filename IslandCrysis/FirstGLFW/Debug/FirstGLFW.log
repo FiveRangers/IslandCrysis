@@ -1,29 +1,8 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project4.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  explosion.cpp
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\shader.h(65): warning C4101: “infoLog”: 未引用的局部变量
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\shader.h(64): warning C4101: “success”: 未引用的局部变量
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\explosion.cpp(45): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+  cloth.cpp
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\clothsimulation\cloth.cpp(326): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
   正在生成代码...
-  正在编译...
-  particle_generator.cpp
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\shader.h(65): warning C4101: “infoLog”: 未引用的局部变量
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\shader.h(64): warning C4101: “success”: 未引用的局部变量
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\particle_generator.cpp(26): warning C4244: “-=”: 从“double”转换到“float”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\particle_generator.cpp(151): warning C4244: “初始化”: 从“double”转换到“GLfloat”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\particle_generator.cpp(156): warning C4244: “=”: 从“double”转换到“GLfloat”，可能丢失数据
+  正在跳过...(未检测到相关更改)
   main.cpp
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\shader.h(65): warning C4101: “infoLog”: 未引用的局部变量
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\shader.h(64): warning C4101: “success”: 未引用的局部变量
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\main.cpp(71): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\main.cpp(72): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\main.cpp(76): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\main.cpp(77): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\main.cpp(79): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\main.cpp(80): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\main.cpp(87): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\maozihao\msoulplayer\islandcrysis-master\islandcrysis\islandcrysis\firstglfw\main.cpp(315): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-  GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-  GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-  正在生成代码...
-  FirstGLFW.vcxproj -> C:\Users\MaoZihao\MSoulPlayer\IslandCrysis-master\IslandCrysis\IslandCrysis\Debug\FirstGLFW.exe
-  FirstGLFW.vcxproj -> C:\Users\MaoZihao\MSoulPlayer\IslandCrysis-master\IslandCrysis\IslandCrysis\Debug\FirstGLFW.pdb (Partial PDB)
+  FirstGLFW.vcxproj -> D:\Git\FiveRangers\IslandCrysis\IslandCrysis\Debug\FirstGLFW.exe
+  FirstGLFW.vcxproj -> D:\Git\FiveRangers\IslandCrysis\IslandCrysis\Debug\FirstGLFW.pdb (Partial PDB)

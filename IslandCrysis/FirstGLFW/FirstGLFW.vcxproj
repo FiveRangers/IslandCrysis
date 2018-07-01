@@ -116,6 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClothSimulation\cloth.cpp" />
     <ClCompile Include="D:\GLFW\src\glad.c" />
     <ClCompile Include="explosion.cpp" />
     <ClCompile Include="imgui.cpp" />
@@ -128,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClothSimulation\cloth.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />

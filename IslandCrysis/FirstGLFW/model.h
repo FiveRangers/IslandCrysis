@@ -12,6 +12,7 @@
 
 #include "mesh.h"
 #include "Shader.h"
+#include "ClothSimulation/cloth.h"
 
 #include <string>
 #include <fstream>
