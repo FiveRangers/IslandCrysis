@@ -176,15 +176,15 @@ int main() {
 
 	//Shader ModelShader("ModelShader.vert", "ModelShader.frag");
 
-	Shader MoonShader("./MoonShader.vert", "./MoonShader.frag");
+	Shader MoonShader("./Shader/MoonShader.vert", "./Shader/MoonShader.frag");
 
 	//“ı”∞”≥…‰shader
-	Shader shader("./shadow_mappingVS.glsl", "./shadow_mappingFS.glsl");
-	Shader islandShader("./shadow_mappingVS.glsl", "./shadow_mappingFS_dolphin.glsl");
+	Shader shader("./Shader/shadow_mappingVS.glsl", "./Shader/shadow_mappingFS.glsl");
+	Shader islandShader("./Shader/shadow_mappingVS.glsl", "./Shader/shadow_mappingFS_dolphin.glsl");
 	//…Ó∂»shader
-	Shader DepthShader("./DepthVS.glsl", "./DepthFS.glsl");
+	Shader DepthShader("./Shader/DepthVS.glsl", "./Shader/DepthFS.glsl");
 	// debug
-	Shader debugShader("DebugVS.glsl", "DebugFS.glsl");
+	Shader debugShader("Shader/DebugVS.glsl", "Shader/DebugFS.glsl");
 
 	Model island("./resources/Small_Tropical_Island/Small_Tropical_Island.obj");
 	Model fire("./resources/fire/fire.obj");
@@ -270,9 +270,9 @@ int main() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, flagEBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, flag.getRow()*flag.getCol() * 6 * sizeof(unsigned int), index, GL_STATIC_DRAW);
 
-	Shader flagShader("FlagVS.glsl", "FlagFS.glsl");
+	Shader flagShader("Shader/FlagVS.glsl", "Shader/FlagFS.glsl");
 
-	Shader skyboxShader("skybox.vert", "skybox.frag");
+	Shader skyboxShader("Shader/skybox.vert", "Shader/skybox.frag");
 
 	// skybox VAO
 	unsigned int skyboxVAO, skyboxVBO;
@@ -325,7 +325,7 @@ int main() {
 	skyboxShader.setInt("skybox", 0);
 
 	//particle system
-	Shader ParticleShader("ParticleShader.vert", "ParticleShader.frag");
+	Shader ParticleShader("Shader/ParticleShader.vert", "Shader/ParticleShader.frag");
 
 	ParticleGenerator* Particles;
 	Particles = new ParticleGenerator(ParticleShader, 20);
