@@ -1,22 +1,28 @@
+#include <iostream>
+#include <vector>
+#include <math.h>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
 #include "imgui.h"
-#include <iostream>
 #include "imconfig.h"
 #include "imgui_internal.h"
 #include "imgui_impl_glfw_gl3.h"
-#include <vector>
-#include <math.h>
-#include <glm\glm.hpp>
-#include "Shader.h"
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtc\type_ptr.hpp>
-#include "Camera.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#include "Shader.h"
+#include "Camera.h"
 #include "model.h"
 #include "particle_generator.h"
 #include "explosion.h"
+#include "Fluid.h"
+
 
 using namespace std;
 
@@ -186,7 +192,8 @@ int main() {
 	// debug
 	Shader debugShader("Shader/DebugVS.glsl", "Shader/DebugFS.glsl");
 
-	Model island("./resources/Small_Tropical_Island/Small_Tropical_Island.obj");
+	//Model island("./resources/Small_Tropical_Island/Small_Tropical_Island.obj");
+	Model island("./resources/island/island.obj");
 	Model fire("./resources/fire/fire.obj");
 	Model moon("./resources/moon/Moon.obj");
 	Model seabird("./resources/seabird/seabird.obj");
@@ -242,6 +249,37 @@ int main() {
 		-1000.0f, -1000.0f,  1000.0f,
 		1000.0f, -1000.0f,  1000.0f
 	};
+	Shader fluidShader("./Shader/Fluid.vert", "./Shader/Fluid.frag");
+
+	Fluid fluid(2000, fluidShader);
+	int fluidSize = fluid.getSize();
+	float *fluidVertices = fluid.getVertices();
+	unsigned int * fluidIndex = fluid.getIndex();
+	unsigned int fluidVAO, fluidVBO;
+	glGenVertexArrays(1, &fluidVAO);
+	glGenBuffers(1, &fluidVBO);
+	glBindVertexArray(fluidVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, fluidVBO);
+	glBufferData(GL_ARRAY_BUFFER, fluidSize*fluidSize*3*sizeof(float), fluidVertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	unsigned int fluidEBO;
+	glGenBuffers(1, &fluidEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fluidEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (fluidSize-1)*(fluidSize-1)*6*sizeof(unsigned int), fluidIndex, GL_STATIC_DRAW);
+	// 加载海面纹理
+	int width, height, nrChannels;
+	unsigned char *data = stbi_load("./resources/water-texture-2.tga", &width, &height, &nrChannels, 0);
+	unsigned int seaTexture;
+	glGenTextures(1, &seaTexture);
+	glBindTexture(GL_TEXTURE_2D, seaTexture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(data);
 
 	// 初始化一块15*15的布料
 	cloth flag(15, 15);
@@ -332,7 +370,9 @@ int main() {
 
 	ExplosionGenerator* explosions;
 	explosions = new ExplosionGenerator(ParticleShader, 1);
-
+	
+	float time = 1.0f;
+	
 	while (!glfwWindowShouldClose(Mywindow)) {
 		//定义变量
 		//光源初始位置
@@ -676,6 +716,30 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 		glDepthFunc(GL_LESS);
+
+
+		// fluid
+		fluidShader.use();
+		model = glm::mat4();
+		model = glm::translate(model, glm::vec3(-1000.0f, -1.0f, -990.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 2.5f, 10.0f));
+		fluidShader.setFloat("time", time+=0.05f);
+		fluidShader.setMat4("model", model);
+		fluidShader.setMat4("view", view);
+		fluidShader.setMat4("projection", projection);
+		fluidShader.setVec4("color", glm::vec4(1.0f, 0.0f, 0.0f, 0.2f));
+		fluidShader.setVec3("lightPos", glm::vec3(200.0f, 200.0f, -100.0f));
+		fluidShader.setVec3("viewPos",camera.Position);
+		fluidShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
+		glBindVertexArray(fluidVAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fluidEBO);
+		glBindBuffer(GL_ARRAY_BUFFER, fluidVBO);
+		glBindVertexArray(fluidVAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fluidEBO);
+		glBindTexture(GL_TEXTURE_2D, seaTexture);
+		glDrawElements(GL_TRIANGLES, (fluidSize-1)*(fluidSize-1) * 6, GL_UNSIGNED_INT, 0);
+
 
 		// cloth simulation
 		flagShader.use();
