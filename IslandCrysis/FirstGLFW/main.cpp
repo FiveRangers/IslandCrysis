@@ -1,6 +1,9 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <math.h>
+
+#include <Windows.h>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -44,6 +47,35 @@ float lastFrame = 0.0f;
 
 unsigned int quadVAO = 0;
 unsigned int quadVBO;
+
+// 传到线程函数的参数
+struct MODEL {
+	Model m;
+	string path;
+	bool isLoaded;
+	MODEL(string path) :path(path) {}
+};
+struct MODELlIST {
+	map<Model*,string>* staticModel;
+};
+//　互斥锁
+HANDLE hMutex;
+// 异步加载模型
+DWORD WINAPI loadModelAsync(LPVOID lpParameter)
+{
+	vector<MODEL*>* staticModel = (vector <MODEL*>*)lpParameter;
+	vector<MODEL*>::iterator it=staticModel->begin();
+	while (it != staticModel->end())
+	{
+		WaitForSingleObject(hMutex, 10);
+		(*it)->m.lazyLoadModel((*it)->path);
+		ReleaseMutex(hMutex);
+		(*it)->isLoaded = true;
+		it++;
+		Sleep(1);
+	}
+	return 0;
+}
 
 void renderQuad()
 {
@@ -202,8 +234,29 @@ int main() {
 	Model rabbit("./resources/rabbit/rabbit.obj");
 	Model treasure("./resources/treasure/treasure.obj");
 	Model dolphin("./resources/dolphin/dolphin.obj");
-	Model ship("./resources/ship/ship.obj");
-	Model whale("./resources/whale/whale.obj");
+	//Model ship("./resources/ship/ship.obj");
+	//Model whale("./resources/whale/whale.obj");
+	//map<Model*, string> staticModel;
+	//Model island,moon,seabird,fence,fossil,rabbit,treasure,dolphin,ship,whale;
+	MODEL ship("./resources/ship/ship.obj"),whale("./resources/whale/whale.obj");
+	vector<MODEL*> staticModel;
+	staticModel.push_back(&ship);
+	staticModel.push_back(&whale);
+	//staticModel.insert(pair<Model*, string>(&island, "./resources/island/island.obj"));
+	//staticModel.insert(pair<Model*, string>(&moon, "./resources/moon/Moon.obj"));
+	//staticModel.insert(pair<Model*, string>(&seabird, "./resources/seabird/seabird.obj"));
+	//staticModel.insert(pair<Model*, string>(&fence, "./resources/fence/fence.obj"));
+	//staticModel.insert(pair<Model*, string>(&fossil, "./resources/fossil/fossil.obj"));
+	//staticModel.insert(pair<Model*, string>(&rabbit, "./resources/rabbit/rabbit.obj"));
+	//staticModel.insert(pair<Model*, string>(&treasure, "./resources/treasure/treasure.obj"));
+	//staticModel.insert(pair<Model*, string>(&dolphin,"./resources/dolphin/dolphin.obj" ));
+	//staticModel.insert(pair<Model*, string>(&ship,"./resources/ship/ship.obj" ));
+	//staticModel.insert(pair<Model*, string>(&whale,"./resources/whale/whale.obj" ));
+	//MODELlIST *param = new MODELlIST;
+	//param->staticModel = &staticModel;
+	hMutex = CreateMutex(NULL, FALSE, NULL);
+	HANDLE loadModelThread = CreateThread(NULL, 0, loadModelAsync, (LPVOID)(&staticModel), 0, NULL);
+	CloseHandle(loadModelThread);
 
 	float skyboxVertices[] = {
 		// positions          
@@ -511,14 +564,21 @@ int main() {
 		model = glm::rotate(model, 75.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.025f, 0.025f, 0.025f));
 		DepthShader.setMat4("model", model);
-		ship.Draw(DepthShader);
+		//ship.Draw(DepthShader);
+		if (ship.isLoaded)
+		{
+			ship.m.Draw(DepthShader);
+		}
 		// whale
 		model = glm::mat4();
 		model = glm::translate(model, glm::vec3(160.0f, -10.0f, 2.0f));
 		model = glm::rotate(model, -85.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
 		DepthShader.setMat4("model", model);
-		whale.Draw(DepthShader);
+		if (whale.isLoaded)
+		{
+			whale.m.Draw(DepthShader);
+		}
 		// island
 		model = glm::mat4();
 		model = glm::scale(model, glm::vec3(0.28f, 0.28f, 0.28f));
@@ -531,14 +591,6 @@ int main() {
 		//重新设置视口
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//debugShader.use();
-		//debugShader.setInt("depthMap", 8);
-		//debugShader.setFloat("near_plane", near_plane);
-		//debugShader.setFloat("far_plane", far_plane);
-		//glActiveTexture(GL_TEXTURE8);
-		//glBindTexture(GL_TEXTURE_2D, depthMap);
-		//renderQuad();
 
 		//利用深度贴图渲染场景
 		shader.use();
@@ -647,7 +699,11 @@ int main() {
 		model = glm::rotate(model, 75.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.025f, 0.025f, 0.025f));
 		shader.setMat4("model", model);
-		ship.Draw(shader);
+		//ship.Draw(shader);
+		if (ship.isLoaded)
+		{
+			ship.m.Draw(shader);
+		}
 
 		// whale
 		model = glm::mat4();
@@ -655,7 +711,11 @@ int main() {
 		model = glm::rotate(model, -85.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
 		shader.setMat4("model", model);
-		whale.Draw(shader);
+		//whale.Draw(shader);
+		if (whale.isLoaded)
+		{
+			whale.m.Draw(shader);
+		}
 
 		// island
 		islandShader.use();

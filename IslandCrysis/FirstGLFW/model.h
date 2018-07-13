@@ -34,8 +34,14 @@ public:
 	bool gammaCorrection;
 
 	/*  Functions   */
+	Model() = default;
 	// constructor, expects a filepath to a 3D model.
 	Model(string const &path, bool gamma = false) : gammaCorrection(gamma)
+	{
+		loadModel(path);
+	}
+
+	void lazyLoadModel(string const &path, bool gamma = false)
 	{
 		loadModel(path);
 	}
