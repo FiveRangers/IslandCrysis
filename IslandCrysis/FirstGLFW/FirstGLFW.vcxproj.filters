@@ -45,6 +45,9 @@
     <ClCompile Include="ClothSimulation\cloth.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Fluid.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -93,6 +96,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ClothSimulation\cloth.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Fluid.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

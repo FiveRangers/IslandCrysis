@@ -1,15 +1,15 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Project4.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\shader.h(65): warning C4101: “infoLog”: 未引用的局部变量
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\shader.h(64): warning C4101: “success”: 未引用的局部变量
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(72): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(73): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(77): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(78): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(80): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(81): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(88): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(345): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\shader.h(66): warning C4101: “infoLog”: 未引用的局部变量
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\shader.h(65): warning C4101: “success”: 未引用的局部变量
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(110): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(111): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(115): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(116): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(118): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(119): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(126): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+d:\git\fiverangers\islandcrysis\islandcrysis\firstglfw\main.cpp(438): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   FirstGLFW.vcxproj -> D:\Git\FiveRangers\IslandCrysis\IslandCrysis\Debug\FirstGLFW.exe

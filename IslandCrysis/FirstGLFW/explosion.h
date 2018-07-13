@@ -1,4 +1,3 @@
-
 #pragma once
 #ifndef EXPLOSION_GENERATOR_H
 #define EXPLOSION_GENERATOR_H
